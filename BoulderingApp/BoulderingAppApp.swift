@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct BoulderingAppApp: App {
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                DetailsView(route: .mock)
-            }
-            .preferredColorScheme(.dark)
+            RouteListView()
+                .preferredColorScheme(.dark)
+
         }
+        .modelContainer(for: Route.self)
     }
 }

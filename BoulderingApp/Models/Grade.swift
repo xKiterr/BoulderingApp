@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Grade: Comparable, Hashable {
+struct Grade: Comparable, Hashable, Codable {
     var baseScore: Int
     
     static func < (lhs: Grade, rhs: Grade) -> Bool {

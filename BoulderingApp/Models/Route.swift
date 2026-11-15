@@ -6,19 +6,20 @@
 //
 
 import Foundation
+import SwiftData
 
-enum Terrain: String {
+enum Terrain: String, Codable {
     case indoor = "Indoor"
     case outdoor = "Outdoor"
 }
 
-enum WallAngle: String {
+enum WallAngle: String, Codable {
     case slab = "Slab"
     case vertical = "Vertical"
     case overhang = "Overhang"
 }
 
-enum HoldType: String, Identifiable {
+enum HoldType: String, Identifiable, Codable {
     case jugs = "Jugs"
     case ledges = "Ledges"
     case crimps = "Crimps"
@@ -31,7 +32,7 @@ enum HoldType: String, Identifiable {
     var id: String { rawValue }
 }
 
-enum RouteStyle: String, Identifiable {
+enum RouteStyle: String, Identifiable, Codable {
     case reachy = "Reachy"
     case powerful = "Powerful"
     case technical = "Technical"
@@ -49,8 +50,8 @@ enum RouteStyle: String, Identifiable {
     var id: String { rawValue }
 }
 
-struct Route: Identifiable, Hashable {
-    let id = UUID()
+@Model
+final class Route: Identifiable, Hashable {
     var name: String
     var grade: Grade
     var date: Date
@@ -75,6 +76,36 @@ struct Route: Identifiable, Hashable {
         combined.append(contentsOf: styles.map { $0.rawValue }.sorted())
             
         return combined
+    }
+    
+    init(
+        name: String,
+        grade: Grade,
+        date: Date = .now,
+        location: String,
+        terrain: Terrain? = nil,
+        wallAngle: WallAngle? = nil,
+        holds: Set<HoldType> = [],
+        styles: Set<RouteStyle> = [],
+        betaBreakdown: String? = nil,
+        shoeCondition: String? = nil,
+        voiceNote: String? = nil,
+        photos: [String] = [],
+        video: String? = nil
+    ) {
+        self.name = name
+        self.grade = grade
+        self.date = date
+        self.location = location
+        self.terrain = terrain
+        self.wallAngle = wallAngle
+        self.holds = holds
+        self.styles = styles
+        self.betaBreakdown = betaBreakdown
+        self.shoeCondition = shoeCondition
+        self.voiceNote = voiceNote
+        self.photos = photos
+        self.video = video
     }
 }
 
