@@ -11,7 +11,10 @@ import SwiftUI
 struct BoulderingAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                DetailsView(route: .mock)
+            }
+            .preferredColorScheme(.dark)
         }
     }
 }
