@@ -25,18 +25,23 @@ final class AddRouteViewModel {
     var pendingVideoURL: URL?
     var pendingVoiceNoteURL: URL?
     
+    var isFetchingLocation = false
+    
     var isSaving = false
     var errorMessage: String?
     
     private let modelContext: ModelContext
     private let mediaService: MediaStorageServicing
+    private let locationService: LocationServicing
     
     init(
         modelContext: ModelContext,
-        mediaService: MediaStorageServicing = MediaStorageService()
+        mediaService: MediaStorageServicing = MediaStorageService(),
+        locationService: LocationServicing = LocationService()
     ){
         self.modelContext = modelContext
         self.mediaService = mediaService
+        self.locationService = locationService
     }
     
     var canSave: Bool {
@@ -103,6 +108,18 @@ final class AddRouteViewModel {
             errorMessage = "Couldn't save route: \(error.localizedDescription)"
             isSaving = false
             return false
+        }
+    }
+    
+    func loadDefaultLocation() async {
+        guard location.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {return}
+        
+        isFetchingLocation = true
+        defer {isFetchingLocation = false}
+        
+        if let detectedPlace = await locationService.fetchCurrentPlaceName(),
+           location.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            location = detectedPlace
         }
     }
     
